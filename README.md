@@ -50,47 +50,68 @@ sequenceDiagram
    export GOOGLE_APPLICATION_CREDENTIALS="path/to/service-account-key.json"
    ```
 
-## Running Locally
+## Deployment
 
-Start the first function (runs on port 8080):
+The deployment process involves two main steps:
+1. Deploying both Cloud Run functions
+2. Setting up the Eventarc trigger for Firestore events
+
+### Manual Deployment
+
+1. Deploy the first function (HTTP trigger):
 ```bash
-npm run start-first
+cd first-function
+npm install
+gcloud run deploy first-function \
+  --source=. \
+  --function=modifyDocument \
+  --allow-unauthenticated \
+  --region=us-central1
 ```
 
-In another terminal, start the second function (runs on port 8081):
+2. Deploy the second function:
 ```bash
-npm run start-second
+cd second-function
+npm install
+gcloud run deploy second-function \
+  --source=. \
+  --function=onItemChange \
+  --region=us-central1
 ```
 
-## Testing
-
-Make a request to the first function:
+3. Create the Eventarc trigger for Firestore:
 ```bash
-curl -X POST http://localhost:8080
+ gcloud eventarc triggers create firestore-trigger \
+       --location=nam5 \
+       --destination-run-service=second-function \
+       --destination-run-region=us-central1 \
+       --event-filters="type=google.cloud.firestore.document.v1.written" \
+       --event-filters="database=(default)" \
+       --event-filters="namespace=(default)" \
+       --event-filters-path-pattern="document=items/**" \
+       --event-data-content-type="application/protobuf" \
+       --service-account=abc@abc.iam.gserviceaccount.com
 ```
 
-Note: The functions run on different ports to avoid conflicts:
-- First function: http://localhost:8080
-- Second function: http://localhost:8081
+### Required IAM Permissions
 
-Check the timing collection in Firestore to see the latency measurements.
+Ensure your service account has the following roles:
+- `roles/run.invoker` - For invoking Cloud Run services
+- `roles/eventarc.eventReceiver` - For receiving Eventarc events
+- `roles/datastore.user` - For Firestore access
 
 ## Testing in Production
 
 After deploying the functions to Cloud Run, you can use the provided test script to verify the end-to-end flow and measure latencies:
 
-1. Install the test script dependencies:
-```bash
-npm install node-fetch
-```
-
-2. Ensure you have the service account credentials set up:
+1. Ensure you have the service account credentials set up:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS="path/to/service-account-key.json"
 ```
 
-3. Run the test script with your deployed first function URL:
+2. Run the test script with your deployed first function URL:
 ```bash
+cd second-function
 node test/test-functions.js https://first-function-xxx.run.app
 ```
 
@@ -124,69 +145,6 @@ Event Type: google.cloud.firestore.document.v1.written
 Event Time: 2024-02-23T07:58:43.999Z
 Document Path: projects/your-project/databases/(default)/documents/items/1708675123456
 ```
-
-## Deployment
-
-The deployment process involves two main steps:
-1. Deploying both Cloud Run functions
-2. Setting up the Eventarc trigger for Firestore events
-
-### Using Cloud Build
-
-The included `cloudbuild.yaml` handles the complete deployment:
-
-```bash
-# Set your project ID
-PROJECT_ID=your-project-id
-
-# Submit the build
-gcloud builds submit --project=$PROJECT_ID \
-  --substitutions=_REGION=us-central1
-
-# Or specify a different region and service account
-gcloud builds submit --project=$PROJECT_ID \
-  --substitutions=_REGION=us-central1,_SERVICE_ACCOUNT=your-service-account@your-project.iam.gserviceaccount.com
-```
-
-### Manual Deployment
-
-1. Deploy the first function (HTTP trigger):
-```bash
-gcloud run deploy first-function \
-  --source=. \
-  --function=modifyDocument \
-  --allow-unauthenticated \
-  --region=us-central1
-```
-
-2. Deploy the second function:
-```bash
-gcloud run deploy second-function \
-  --source=. \
-  --function=onItemChange \
-  --region=us-central1
-```
-
-3. Create the Eventarc trigger for Firestore:
-```bash
- gcloud eventarc triggers create firestore-trigger \
-       --location=nam5 \
-       --destination-run-service=second-function \
-       --destination-run-region=us-central1 \
-       --event-filters="type=google.cloud.firestore.document.v1.written" \
-       --event-filters="database=(default)" \
-       --event-filters="namespace=(default)" \
-       --event-filters-path-pattern="document=items/**" \
-       --event-data-content-type="application/protobuf" \
-       --service-account=abc@abc.iam.gserviceaccount.com
-```
-
-### Required IAM Permissions
-
-Ensure your service account has the following roles:
-- `roles/run.invoker` - For invoking Cloud Run services
-- `roles/eventarc.eventReceiver` - For receiving Eventarc events
-- `roles/datastore.user` - For Firestore access
 
 ### Important Notes
 

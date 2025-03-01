@@ -40,7 +40,7 @@ Start the function:
 npm start
 ```
 
-This will start the function on http://localhost:8080
+This will start the function on http://localhost:8081
 
 ## Testing
 

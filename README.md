@@ -112,7 +112,8 @@ export GOOGLE_APPLICATION_CREDENTIALS="path/to/service-account-key.json"
 2. Run the test script with your deployed first function URL:
 ```bash
 cd second-function
-node test/test-functions.js https://first-function-xxx.run.app
+# Execute the script n times and determine the 50th, 95th, and 99th percentile latencies.
+node test/test-functions.js https://first-function-xxx.run.app n
 ```
 
 The test script will:
@@ -144,6 +145,28 @@ Trigger Details:
 Event Type: google.cloud.firestore.document.v1.written
 Event Time: 2024-02-23T07:58:43.999Z
 Document Path: projects/your-project/databases/(default)/documents/items/1708675123456
+
+=== Summary Statistics ===
+
+First Function Duration Statistics (ms):
+P50: 107.50
+P95: 138.55
+P99: 239.11
+
+Trigger Latency Statistics (ms):
+P50: 93.00
+P95: 760.65
+P99: 1109.44
+
+Second Function Duration Statistics (ms):
+P50: 159.50
+P95: 185.40
+P99: 198.71
+
+Total Duration Statistics (ms):
+P50: 383.00
+P95: 1034.80
+P99: 1397.96
 ```
 
 ### Important Notes

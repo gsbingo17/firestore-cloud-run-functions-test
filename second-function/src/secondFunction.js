@@ -1,6 +1,7 @@
 const functions = require('@google-cloud/functions-framework');
-const { db } = require('./src/config');
+const { db } = require('./config');
 const protobuf = require('protobufjs');
+const path = require('path');
 
 // Register a Firestore trigger function
 functions.cloudEvent('onItemChange', async (cloudEvent) => {
@@ -11,7 +12,7 @@ functions.cloudEvent('onItemChange', async (cloudEvent) => {
 
     // Load the Firestore event data type
     console.log('Loading protos...');
-    const root = await protobuf.load('data.proto');
+    const root = await protobuf.load(path.join(__dirname, '../protos/firestore.proto'));
     const DocumentEventData = root.lookupType(
       'google.events.cloud.firestore.v1.DocumentEventData'
     );

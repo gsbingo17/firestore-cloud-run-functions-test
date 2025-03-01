@@ -1,0 +1,16 @@
+{
+  "name": "firestore-second-function",
+  "version": "1.0.0",
+  "description": "Second function triggered by Firestore changes with test script",
+  "main": "index.js",
+  "scripts": {
+    "start": "functions-framework --target=onItemChange --source=src/secondFunction.js --port=8081 --signature-type=http --security-level=none",
+    "test": "GOOGLE_APPLICATION_CREDENTIALS=./service-account.json node test/test-functions.js http://localhost:8080"
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.0.0",
+    "express": "^4.18.2",
+    "firebase-admin": "^11.11.0",
+    "node-fetch": "^3.3.0"
+  }
+}

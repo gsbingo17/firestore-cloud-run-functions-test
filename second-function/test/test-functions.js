@@ -103,7 +103,7 @@ async function testFunctions(firstFunctionUrl, executionTimes = 1) {
         setTimeout(() => {
           unsubscribe();
           reject(new Error('Test timed out waiting for complete timing data'));
-        }, 60000);
+        }, 10000);
       });
     }
 

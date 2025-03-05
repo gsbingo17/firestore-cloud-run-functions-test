@@ -149,24 +149,24 @@ Document Path: projects/your-project/databases/(default)/documents/items/1708675
 === Summary Statistics ===
 
 First Function Duration Statistics (ms):
-P50: 107.50
-P95: 138.55
-P99: 239.11
+P50: 83.00
+P95: 103.05
+P99: 123.00
 
 Trigger Latency Statistics (ms):
-P50: 93.00
-P95: 760.65
-P99: 1109.44
+P50: 38.00
+P95: 60.00
+P99: 130.31
 
 Second Function Duration Statistics (ms):
-P50: 159.50
-P95: 185.40
-P99: 198.71
+P50: 150.00
+P95: 168.00
+P99: 182.00
 
 Total Duration Statistics (ms):
-P50: 383.00
-P95: 1034.80
-P99: 1397.96
+P50: 274.00
+P95: 315.00
+P99: 398.41
 ```
 
 ### Important Notes

@@ -133,17 +133,17 @@ Making request to first function with requestId: 1708675123456
 
 Current timing data:
 First Function Start: 2024-02-23T07:58:43.456Z
-First Function End: 2024-02-23T07:58:43.789Z
-First Function Duration: 333 ms
-Second Function Start: 2024-02-23T07:58:44.123Z
-Trigger Latency: 334 ms
-Second Function End: 2024-02-23T07:58:44.456Z
-Second Function Duration: 333 ms
-Total Duration: 1000 ms
+First Function End: 2024-02-23T07:58:43.539Z
+First Function Duration: 83 ms
+Second Function Start: 2024-02-23T07:58:43.599Z
+Trigger Latency: 60 ms
+Second Function End: 2024-02-23T07:58:44.767Z
+Second Function Duration: 168 ms
+Total Duration: 311 ms
 
 Trigger Details:
 Event Type: google.cloud.firestore.document.v1.written
-Event Time: 2024-02-23T07:58:43.999Z
+Event Time: 2024-02-23T07:58:43.666Z
 Document Path: projects/your-project/databases/(default)/documents/items/1708675123456
 
 === Summary Statistics ===
